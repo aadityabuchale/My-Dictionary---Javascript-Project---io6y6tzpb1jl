@@ -8,7 +8,7 @@
     --background-btns-color : rgb(62, 62, 62);
 }
 
-/* -------------- first page styles ------------ */
+/* -------------- search page styles ------------ */
 
 header {
     display: flex;
@@ -79,18 +79,18 @@ header #historyBtn:hover {
 #history-page {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
-    margin: 0px 50px;
+    margin: 10px 50px;
+    
 }
 
 .card {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    width: 350px;
+    width: 320px;
     height: 400px;
-    
     background-color: rgb(217,217,217);
     padding: 12px;
     display: inline-flex;
@@ -134,8 +134,19 @@ header #historyBtn:hover {
 
 /* ---------- media queries ----------*/
 
+@media  screen and (max-width: 768px) {   
+    
+    .card {
+        margin: 10px;
+        width: 320px;
+    }
 
-@media screen and (max-width: 450px) {
+    #history-page {
+        margin: 10px 40px;
+    }
+}
+
+@media screen and (max-width: 480px) {
 
     header #logo {
         width: 60vw;
@@ -158,10 +169,11 @@ header #historyBtn:hover {
         font-size: 6vw;
         margin: 5px;
     }
-
+    #history-page {
+        margin: 15px 40px;
+    }
     .card {
-        margin: 10px 25px;
-        width: 250px;
+        margin: 10px 0px;
+        width: 320px;
     }
 }
-
