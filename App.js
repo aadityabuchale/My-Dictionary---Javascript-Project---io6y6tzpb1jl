@@ -161,8 +161,6 @@ const API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/";
 
         word = word.trim();
 
-        console.log(word);
-
         let wordArray = JSON.parse(localStorage.getItem("words"));
 
         wordArray = wordArray.filter( (w) => {
