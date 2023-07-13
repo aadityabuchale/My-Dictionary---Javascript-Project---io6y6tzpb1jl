@@ -1,1 +1,167 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: poppins;
+}
+:root {
+    --background-btns-color : rgb(62, 62, 62);
+}
+
+/* -------------- first page styles ------------ */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+header #logo {
+    width: 50vw;
+}
+
+header #historyBtn{
+    color: #fff;
+    background-color: var(--background-btns-color);
+    padding: 1.2vh 3vw;
+    font-size: 4vw;
+    border-radius: 12px;
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+header #historyBtn:hover {
+    color: var(--background-btns-color);
+    background-color: #e8e8e8;
+    cursor: pointer;
+}
+
+#search-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+}
+
+#search-page #searchBox {
+    width: 40vw;
+    height: 8vh;
+    border-radius: 30px;
+    font-size: 30px;
+    padding: 6%;
+}
+
+#search-page #searchBtn {
+    color: #fff;
+    background-color: var(--background-btns-color);
+    border-radius: 50%;
+    font-size: 30px;
+    padding: 0.3em 0.45em;
+}
+
+#search-page #searchBtn:hover {
+    color: var(--background-btns-color);
+    background-color: #e8e8e8;
+    cursor: pointer;
+}
+
+#search-page .searchText {
+    font-size: 4.5vw;
+    font-family: Marcellus SC;
+    margin: 10px;
+}
+
+
+/* ---------- history page css ---------- */
+
+#history-page {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: 0px 50px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 350px;
+    height: 400px;
+    
+    background-color: rgb(217,217,217);
+    padding: 12px;
+    display: inline-flex;
+    border-radius: 15px;
+    margin: 10px;
+    justify-content: space-around;
+}
+
+.card .word-name {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.card .word-meaning {
+    margin : 12px 0px;
+}
+
+.card .deleteBtn {
+    width: 45px;
+    height: 45px;
+    background-color: var(--background-btns-color);
+    color: #fff;
+    border-radius: 50%;
+    align-self: center;
+    margin-right: 10px;
+    font-size: 15px;
+}
+
+.card .deleteBtn:hover {
+    color: var(--background-btns-color);
+    background-color: #e8e8e8;
+    cursor: pointer;
+}
+
+
+#errorMsg {
+    font-size: 25px;
+    margin: 20px;
+    padding: 5px;
+}
+
+/* ---------- media queries ----------*/
+
+
+@media screen and (max-width: 450px) {
+
+    header #logo {
+        width: 60vw;
+        margin-top: 6px;
+    }
+    #search-page #searchBox {
+        width: 60vw;
+        height: 6vh;
+        font-size: 16px;
+    }
+    
+    #search-page #searchBtn{
+        margin: 5px auto;
+        display: block;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    #search-page :first-child {
+        font-size: 6vw;
+        margin: 5px;
+    }
+
+    .card {
+        margin: 10px 25px;
+        width: 250px;
+    }
+}
 
