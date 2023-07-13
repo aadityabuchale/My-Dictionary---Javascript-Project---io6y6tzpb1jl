@@ -1,7 +1,6 @@
 const API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/";
 
 
-
         // ---------------- fetching API data ----------------- //
 
     async function fetchData(word) {
@@ -17,6 +16,8 @@ const API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/";
     }
 
     const processFetchedData = async (data) => {  // fetching data from dictionary
+
+        document.querySelector("#searchBox").value = "";
 
         const word = await fetchData(data);
 
@@ -88,6 +89,8 @@ const API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/";
         let searchPage = document.querySelector('#search-page');
         let historyBtn = document.querySelector('#historyBtn');
 
+        
+
         if( tog == 1){
             historyPage.style.display = "flex";
             searchPage.style.display = "none";
@@ -148,7 +151,7 @@ const API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/";
 
         wordArray = removeFromLocalStorage( word[0].word );
         
-        wordArray.push(word);
+        wordArray.unshift(word);
 
         localStorage.setItem( "words" , JSON.stringify(wordArray));
     }
@@ -170,8 +173,4 @@ const API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/";
 
         return wordArray;
     }
-
-
-
-
 
