@@ -1,130 +1,117 @@
 const API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/";
 
+// ---------------- fetching API data ----------------- //
 
-        // ---------------- fetching API data ----------------- //
+async function fetchData(word) {
+  try {
+    const request = await fetch(API_URL + word);
+    const data = await request.json();
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}
 
-    async function fetchData(word) {
+const processFetchedData = async (data) => {
+  // fetching data from dictionary
 
-        try {
-            const request = await fetch(API_URL + word);
-            const data = await request.json();
-            return data;
-        }
-        catch(err) {
-            console.log(err);
-        }
-    }
+  document.querySelector("#searchBox").value = "";
 
-    const processFetchedData = async (data) => {  // fetching data from dictionary
+  const word = await fetchData(data);
 
-        document.querySelector("#searchBox").value = "";
+  if (word.title === undefined) {
+    addToLocalStorage(word);
+    togglePages(1);
+  } else {
+    document.querySelector("#errorMsg").innerHTML = word.title;
+    setTimeout(() => {
+      document.querySelector("#errorMsg").innerHTML = "";
+    }, 5000);
+  }
+};
 
-        const word = await fetchData(data);
+// ---------- handling click events ------------- //
 
-        if(word.title === undefined){
-            addToLocalStorage(word);
-            togglePages(1);
-        }
-        else {
-            document.querySelector("#errorMsg").innerHTML = word.title;
-            setTimeout( () => {
-                document.querySelector("#errorMsg").innerHTML = "";
-            },5000)
-        }
-    }
+let searchButton = document.querySelector("#searchBtn");
 
+searchButton.addEventListener("click", () => {
+  //search
 
-        // ---------- handling click events ------------- //
+  let input = document.querySelector("#searchBox");
 
+  if (input.value !== "") {
+    processFetchedData(input.value);
+  }
+});
 
-        let searchButton = document.querySelector("#searchBtn");
+let historyBtn = document.querySelector("#historyBtn");
 
-        searchButton.addEventListener("click", () => {         //search
-    
-            let input = document.querySelector("#searchBox");
-    
-            if(input.value !== "")
-            {
-                processFetchedData(input.value);
-            }
-        })
-    
-        let historyBtn = document.querySelector("#historyBtn");
-    
-        historyBtn.addEventListener("click", () => {     // history
-    
-            if( toggle == 1)
-                togglePages(toggle);
-            else{
-                togglePages(toggle);
-            }
-        })
-    
-        let historyPage = document.querySelector("#history-page");
-    
-        historyPage.addEventListener( "click" , (e) => {       // delete
-    
-            if( e.target.classList.contains("deleteBtn") ){
-                e.target.parentNode.remove();
-                removeFromLocalStorage( e.target.parentNode.childNodes[1].textContent);
-                
-            }
-            else if( e.target.classList.contains("fa-trash") ){
-    
-                e.target.parentNode.parentNode.remove();
-                removeFromLocalStorage(e.target.parentNode.parentNode.childNodes[1].textContent);
-            }
-            
-        })
+historyBtn.addEventListener("click", () => {
+  // history
 
+  if (toggle == 1) togglePages(toggle);
+  else {
+    togglePages(toggle);
+  }
+});
 
+let historyPage = document.querySelector("#history-page");
 
-        // ------------ rendering & manupulating DOM ------------- //
+historyPage.addEventListener("click", (e) => {
+  // delete
 
-    let toggle = 1;
+  if (e.target.classList.contains("deleteBtn")) {
+    e.target.parentNode.remove();
+    removeFromLocalStorage(e.target.parentNode.childNodes[1].textContent);
+  } else if (e.target.classList.contains("fa-trash")) {
+    e.target.parentNode.parentNode.remove();
+    removeFromLocalStorage(
+      e.target.parentNode.parentNode.childNodes[1].textContent
+    );
+  }
+});
 
-    function togglePages(tog) {
+// ------------ rendering & manupulating DOM ------------- //
 
-        let historyPage = document.querySelector('#history-page');
-        let searchPage = document.querySelector('#search-page');
-        let historyBtn = document.querySelector('#historyBtn');
+let toggle = 1;
 
-        
+function togglePages(tog) {
+  let historyPage = document.querySelector("#history-page");
+  let searchPage = document.querySelector("#search-page");
+  let historyBtn = document.querySelector("#historyBtn");
 
-        if( tog == 1){
-            historyPage.style.display = "flex";
-            searchPage.style.display = "none";
-            historyBtn.innerHTML = "Search";
-            renderCards();
-            toggle = 0;
-        }   
-        else {
-            historyPage.style.display = "none";
-            searchPage.style.display = "flex";
-            historyBtn.innerHTML = "History";
-            toggle = 1;
-        }
-    }
+  if (tog == 1) {
+    historyPage.style.display = "flex";
+    searchPage.style.display = "none";
+    historyBtn.innerHTML = "Search";
+    renderCards();
+    toggle = 0;
+  } else {
+    historyPage.style.display = "none";
+    searchPage.style.display = "flex";
+    historyBtn.innerHTML = "History";
+    toggle = 1;
+  }
+}
 
-    function renderCards(){
+function renderCards() {
+  let historyPage = document.querySelector("#history-page");
 
-        let historyPage = document.querySelector('#history-page');
+  historyPage.innerHTML = "";
+  let wordArray;
 
-        historyPage.innerHTML = "";
+  if (localStorage.getItem("words") !== null) {
+    wordArray = JSON.parse(localStorage.getItem("words"));
 
-        let wordArray = JSON.parse( localStorage.getItem("words"));
+    wordArray.forEach((word) => {
+      let meanings = word[0].meanings[word[0].meanings.length - 1];
 
-        wordArray.forEach( word => {
+      let definitions = meanings.definitions;
 
-            let meanings = word[0].meanings[ word[0].meanings.length - 1];
-        
-            let definitions = meanings.definitions;
+      let card = document.createElement("div");
+      card.className = "card";
 
-            let card = document.createElement("div");
-            card.className = "card";
-            
-            card.innerHTML = 
-            `  
+      card.innerHTML = `  
             <div class="word-name">
                 ${word[0].word}
             </div>
@@ -132,43 +119,41 @@ const API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/";
                 ${definitions[0].definition};
             </div>
             <button class="deleteBtn"><i class="fa-sharp fa-solid fa-trash"></i></button>
-            `
+            `;
 
-            historyPage.appendChild(card);
-        })
-    }
+      historyPage.appendChild(card);
+    });
+  }
+}
 
+// -------------- localstorage operations ------------------ //
 
-    // -------------- localstorage operations ------------------ //
+function addToLocalStorage(word) {
+  //adding to local storage
 
+  if (localStorage.getItem("words") === null) {
+    localStorage.setItem("words", "[]");
+  }
 
-    function addToLocalStorage(word){                           //adding to local storage
+  wordArray = removeFromLocalStorage(word[0].word);
 
-        if( localStorage.getItem("words") === null)
-        {
-            localStorage.setItem( "words" , "[]");
-        }
+  wordArray.unshift(word);
 
-        wordArray = removeFromLocalStorage( word[0].word );
-        
-        wordArray.unshift(word);
+  localStorage.setItem("words", JSON.stringify(wordArray));
+}
 
-        localStorage.setItem( "words" , JSON.stringify(wordArray));
-    }
+function removeFromLocalStorage(word) {
+  // removing from local storage
 
+  word = word.trim();
 
-    function removeFromLocalStorage(word){                // removing from local storage
+  let wordArray = JSON.parse(localStorage.getItem("words"));
 
-        word = word.trim();
+  wordArray = wordArray.filter((w) => {
+    return w[0].word != word;
+  });
 
-        let wordArray = JSON.parse(localStorage.getItem("words"));
+  localStorage.setItem("words", JSON.stringify(wordArray));
 
-        wordArray = wordArray.filter( (w) => {
-            return w[0].word != word 
-        } );
-
-        localStorage.setItem( "words" , JSON.stringify(wordArray));
-
-        return wordArray;
-    }
-
+  return wordArray;
+}
